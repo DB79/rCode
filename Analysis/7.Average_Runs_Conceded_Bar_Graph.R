@@ -36,20 +36,21 @@ total_matches_per_team <- sqldf('
 
 # total runs per team
 
-RunsPerTeam <- sqldf('select sum(total_runs) AS "total_runs", bowling_team from deliveries group by bowling_team order by 1 DESC')
+Runs_Conceded_Per_Team <- sqldf('select sum(total_runs) AS "total_runs", bowling_team from deliveries group by bowling_team order by 1 DESC')
 
-RunsPerTeam <- merge(RunsPerTeam, total_matches_per_team, by.x = "bowling_team", by.y = "team")
+Runs_Conceded_Per_Team <- merge(Runs_Conceded_Per_Team, total_matches_per_team, by.x = "bowling_team", by.y = "team")
 
-RunPerMatchPerTeam <- sqldf('select bowling_team, (cast(total_runs as float)/total_matches) as "Runs_Per_Match" from RunsPerTeam group by bowling_team')
+Runs_Conceded_Per_Match_Per_Team <- sqldf('select bowling_team, (cast(total_runs as float)/total_matches) as "Runs_Per_Match" from Runs_Conceded_Per_Team group by bowling_team')
 
-RunsPerTeam <- merge(RunsPerTeam, RunPerMatchPerTeam, by.x = "bowling_team", by.y = "bowling_team")
+Runs_Conceded_Per_Team <- merge(Runs_Conceded_Per_Team, Runs_Conceded_Per_Match_Per_Team, by.x = "bowling_team", by.y = "bowling_team")
 
-ggplot(RunsPerTeam, aes(x=bowling_team, y=Runs_Per_Match))+
-  geom_bar(stat = 'identity', fill = 'grey', position = "dodge")+
+
+ggplot(Runs_Conceded_Per_Team,aes(x= reorder(bowling_team, Runs_Per_Match), y= Runs_Per_Match))+
+  geom_bar(fill = 'grey', stat = "identity")+
   theme_classic()+
   ggtitle('Average Runs Conceded By Team Per Game')+
   coord_flip()+ 
-  labs(x='Bowling Team', y='Average Runs Scored')+
+  labs(x='Bowling Team', y='Average Runs Conceded')+
   geom_text(aes(label = Runs_Per_Match, y = Runs_Per_Match),
             size = 3,  position = position_dodge(0.9), vjust = 0)
 

@@ -21,7 +21,6 @@ total_team1_matches_per_team <- sqldf('select team1 as "team", count(id) as "mat
 total_team2_matches_per_team <- sqldf('select team2 as "team", count(id) as "matches" from matches group by team2')
 
 # combine both sets above th get total numbuer of games per team
-
 total_matches_per_team <- sqldf('
                                 select team,sum(matches) total_matches
                                 from
@@ -36,20 +35,19 @@ total_matches_per_team <- sqldf('
 
 # total runs per team
 
-RunsPerTeam <- sqldf('select sum(total_runs) AS "total_runs", batting_team from deliveries group by batting_team order by 1 DESC')
+Runs_Scored_Per_Team <- sqldf('select sum(total_runs) AS "total_runs", batting_team from deliveries group by batting_team order by 1 DESC')
 
-RunsPerTeam <- merge(RunsPerTeam, total_matches_per_team, by.x = "batting_team", by.y = "team")
+Runs_Scored_Per_Team <- merge(Runs_Scored_Per_Team, total_matches_per_team, by.x = "batting_team", by.y = "team")
 
-RunPerMatchPerTeam <- sqldf('select batting_team, (cast(total_runs as float)/total_matches) as "Runs_Per_Match" from RunsPerTeam group by batting_team')
+Runs_Scored_Per_Match_Per_Team <- sqldf('select batting_team, (cast(total_runs as float)/total_matches) as "Runs_Per_Match" from Runs_Scored_Per_Team group by batting_team')
 
-RunsPerTeam <- merge(RunsPerTeam, RunPerMatchPerTeam, by.x = "batting_team", by.y = "batting_team")
+Runs_Scored_Per_Team <- merge(Runs_Scored_Per_Team, Runs_Scored_Per_Match_Per_Team, by.x = "batting_team", by.y = "batting_team")
 
-ggplot(RunsPerTeam, aes(x=batting_team, y=Runs_Per_Match))+
-  geom_bar(stat = 'identity', fill = 'grey', position = "dodge")+
+ggplot(Runs_Scored_Per_Team, aes(x= reorder(batting_team, Runs_Per_Match), y= Runs_Per_Match))+
+  geom_bar(fill = 'grey', stat = "identity")+
   theme_classic()+
   ggtitle('Average Runs Scored By Team Per Game')+
   coord_flip()+ 
   labs(x='Batting Team', y='Average Runs Scored')+
   geom_text(aes(label = Runs_Per_Match, y = Runs_Per_Match),
-            size = 3,  position = position_dodge(0.9), vjust = 0)
-  
+           size = 3,  position = position_dodge(0.9), vjust = 0)

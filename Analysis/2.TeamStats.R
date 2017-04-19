@@ -55,11 +55,14 @@ df_teams<-df_teams %>%
   mutate(winning_perc = (total_win/total_matches_per_team$total)*100)
 
 
-# plot win data
-df_teams %>% 
-  ggplot(aes(x= reorder(team, -winning_perc), y= winning_perc))+
-  geom_bar(aes(fill = team), stat = "identity")+
-  labs(list(title = "Teams Performance", x = "Team", y = "Winning Percentage"))+
+ggplot(df_teams, aes(x= reorder(team, winning_perc), y= winning_perc))+
+  geom_bar(fill = 'grey', stat = "identity")+
+  theme_classic()+
+  ggtitle('Winning Percent per Team')+
+  labs(x = "Team", y = "Winning Percentage")+
   scale_fill_grey()+
-  theme(axis.text.x=element_text(angle=75, hjust=1), plot.title = element_text(size = 8, face = "bold"),text = element_text(size=8))
+  coord_flip()+
+  geom_text(aes(label = winning_perc, y = winning_perc),
+            size = 3,  position = position_dodge(0.9), vjust = 0)
+  
 

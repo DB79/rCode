@@ -40,12 +40,12 @@ wickets_per_match <- sqldf('select bowling_team ,(cast(Total_Wickets_Taken as fl
 
 wickets <- merge(wickets, wickets_per_match, by.x = "bowling_team", by.y = "bowling_team")
 
-# graph of average wickets taken per team
-ggplot(wickets, aes(x=bowling_team, y=Wickets_Per_Match))+
-  geom_bar(stat = 'identity', fill = 'grey', position = "dodge")+
+ggplot(wickets,aes(x= reorder(bowling_team, Wickets_Per_Match), y= Wickets_Per_Match))+
+  geom_bar(fill = 'grey', stat = "identity")+
   theme_classic()+
   ggtitle('Average Wickets Taken By Team Per Game')+
   coord_flip()+ 
-  labs(x='Bowling Team', y='Average Wickets')+
+  labs(x='Bowling Team', y='Average Wickets Taken')+
   geom_text(aes(label = Wickets_Per_Match, y = Wickets_Per_Match),
             size = 3,  position = position_dodge(0.9), vjust = 0)
+

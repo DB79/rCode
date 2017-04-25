@@ -45,6 +45,28 @@ Runs_Conceded_Per_Match_Per_Team <- sqldf('select bowling_team, (cast(total_runs
 Runs_Conceded_Per_Team <- merge(Runs_Conceded_Per_Team, Runs_Conceded_Per_Match_Per_Team, by.x = "bowling_team", by.y = "bowling_team")
 
 
+##########################################################################################
+# Scatter Plot of Runs Scored Vs Winning %
+##########################################################################################
+
+png(filename="Images/Scatter_Plot_Winning_Percentage_Vs_Runs_Conceded.png")
+
+plot(df_teams$winning_perc,
+     Runs_Conceded_Per_Team$Runs_Per_Match,
+     xlab = "Winning Percentage",
+     ylab = "Avaerage Runs Conceded",
+     main = "Scatter Plor of Average Runs Conceded Vs Winning %")
+
+dev.off()
+
+##########################################################################################
+
+
+
+
+
+
+
 ggplot(Runs_Conceded_Per_Team,aes(x= reorder(bowling_team, Runs_Per_Match), y= Runs_Per_Match))+
   geom_bar(fill = 'grey', stat = "identity")+
   theme_classic()+

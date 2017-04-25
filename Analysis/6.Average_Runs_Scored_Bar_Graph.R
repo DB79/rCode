@@ -43,6 +43,24 @@ Runs_Scored_Per_Match_Per_Team <- sqldf('select batting_team, (cast(total_runs a
 
 Runs_Scored_Per_Team <- merge(Runs_Scored_Per_Team, Runs_Scored_Per_Match_Per_Team, by.x = "batting_team", by.y = "batting_team")
 
+
+##########################################################################################
+# Scatter Plot of Runs Scored Vs Winning %
+##########################################################################################
+
+png(filename="Images/Scatter_Plot_Winning_Percentage_Vs_Runs_Scored.png")
+
+plot(df_teams$winning_perc,
+     Runs_Scored_Per_Team$Runs_Per_Match,
+     xlab = "Winning Percentage",
+     ylab = "Avaerage Runs Scored",
+     main = "Scatter Plor of Average Runs Scored Vs Winning %")
+
+dev.off()
+
+##########################################################################################
+
+
 ggplot(Runs_Scored_Per_Team, aes(x= reorder(batting_team, Runs_Per_Match), y= Runs_Per_Match))+
   geom_bar(fill = 'grey', stat = "identity")+
   theme_classic()+

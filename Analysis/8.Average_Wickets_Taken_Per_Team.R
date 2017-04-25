@@ -40,6 +40,28 @@ wickets_per_match <- sqldf('select bowling_team ,(cast(Total_Wickets_Taken as fl
 
 wickets <- merge(wickets, wickets_per_match, by.x = "bowling_team", by.y = "bowling_team")
 
+##########################################################################################
+# Scatter Plot of Runs Scored Vs Winning %
+##########################################################################################
+
+png(filename="Images/Scatter_Plot_Winning_Percentage_Vs_Wickets_Taken.png")
+
+plot(df_teams$winning_perc,
+     wickets$Wickets_Per_Match,
+     xlab = "Winning Percentage",
+     ylab = "Avaerage Wickets Taken",
+     main = "Scatter Plor of Average Wickets Taken Vs Winning %")
+
+dev.off()
+
+cor(df_teams$winning_perc, wickets$Wickets_Per_Match)
+##########################################################################################
+
+
+
+
+
+
 ggplot(wickets,aes(x= reorder(bowling_team, Wickets_Per_Match), y= Wickets_Per_Match))+
   geom_bar(fill = 'grey', stat = "identity")+
   theme_classic()+

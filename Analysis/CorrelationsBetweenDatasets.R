@@ -138,20 +138,39 @@ wickets <- merge(wickets, wickets_per_match, by.x = "bowling_team", by.y = "bowl
 # correlation between winning % and wickets taken per match
 cor(df_teams$winning_perc,wickets$Wickets_Per_Match)
 
+plot(df_teams$winning_perc, wickets$Wickets_Per_Match)
+
+################################################################################################
+
 # correlation between winning % and runs scroed per match
 cor(df_teams$winning_perc, Runs_Scored_Per_Team$Runs_Per_Match)
+
+plot(df_teams$winning_perc, Runs_Scored_Per_Team$Runs_Per_Match)
+
+################################################################################################
 
 # correlation between winning % and run conceded per match
 cor(df_teams$winning_perc, Runs_Conceded_Per_Team$Runs_Per_Match)
 
+plot(df_teams$winning_perc, Runs_Conceded_Per_Team$Runs_Per_Match)
+
+################################################################################################
+
 # correlation between runs scored and runs conceded
 cor(Runs_Scored_Per_Team$Runs_Per_Match, Runs_Conceded_Per_Team$Runs_Per_Match)
+
+plot(Runs_Scored_Per_Team$Runs_Per_Match, Runs_Conceded_Per_Team$Runs_Per_Match,
+     xlab = "Runs Scored Per Match", ylab = "Run Conceded Per Match")
+
+
+################################################################################################
 
 # correlation between wickets conceded and runs conceded
 cor(wickets$Wickets_Per_Match, Runs_Conceded_Per_Team$Runs_Per_Match)
 
-# correlation between wickets conceded and scored conceded
-cor(wickets$Wickets_Per_Match, Runs_Scored_Per_Team$Runs_Per_Match)
+plot(wickets$Wickets_Per_Match, Runs_Conceded_Per_Team$Runs_Per_Match)
+
+################################################################################################
 
 
 ################################################################################################
